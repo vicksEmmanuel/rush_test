@@ -20,6 +20,11 @@ module.exports = {
           900: 'rgba(37, 150, 190, 0.9)',
           DEFAULT: 'rgba(37, 150, 190, 1)',
         },
+        button: 'black',
+      },
+      fontFamily: {
+        primary: ['Silkscreen', 'sans-serif', 'cursive'],
+        secondary: ['Inter'],
       },
     },
   },

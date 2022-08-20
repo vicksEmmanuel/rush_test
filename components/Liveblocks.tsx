@@ -33,6 +33,7 @@ const LiveBlocks = ({ numberOfBlocks }: { numberOfBlocks: number }) => {
       {new Array(numberOfBlocks).fill(0).map((_, idx) => {
         return (
           <div
+            key={idx}
             onMouseOver={() => {
               if (scrollDirection === 'up') {
                 const index = idx - 20;
