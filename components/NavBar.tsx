@@ -2,7 +2,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 const NavBar = () => {
-  const { pathname } = useRouter();
+  let { pathname } = useRouter();
+  pathname = pathname.toLowerCase();
   const color = 'text-blue-700';
 
   return (
@@ -24,10 +25,10 @@ const NavBar = () => {
           <ul className="flex flex-col p-4 mt-4 bg-gray-50 rounded-lg border border-gray-100 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 bg-gray-800 md:bg-gray-900 border-gray-700">
             <li>
               <div
-                className={`block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 text-gray-400 md:hover:text-white hover:bg-gray-700 hover:text-white md:hover:bg-transparent ${
-                  !(pathname === '/history' || pathname === '/addItems')
+                className={`block py-2 pr-4 pl-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:hover:text-white hover:bg-gray-700 hover:text-white md:hover:bg-transparent ${
+                  !(pathname === '/history' || pathname === '/additems')
                     ? color
-                    : 'text-white'
+                    : 'text-gray-400'
                 }`}
                 aria-current="page"
               >
@@ -36,8 +37,8 @@ const NavBar = () => {
             </li>
             <li>
               <div
-                className={`block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 text-gray-400 md:hover:text-white hover:bg-gray-700 hover:text-white md:hover:bg-transparent ${
-                  pathname === '/history' ? color : 'text-white'
+                className={`block py-2 pr-4 pl-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:hover:text-white hover:bg-gray-700 hover:text-white md:hover:bg-transparent ${
+                  pathname === '/history' ? color : 'text-gray-400'
                 }`}
               >
                 <Link href={'/history'}>Shopping History</Link>
@@ -45,8 +46,8 @@ const NavBar = () => {
             </li>
             <li>
               <div
-                className={`block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 text-gray-400 md:hover:text-white hover:bg-gray-700 hover:text-white md:hover:bg-transparent ${
-                  pathname === '/addItems' ? color : 'text-white'
+                className={`block py-2 pr-4 pl-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:hover:text-white hover:bg-gray-700 hover:text-white md:hover:bg-transparent ${
+                  pathname === '/additems' ? color : 'text-gray-400'
                 }`}
               >
                 <Link href={'/addItems'}>Add Items</Link>
