@@ -1,4 +1,5 @@
 import { FaGamepad } from 'react-icons/fa';
+import Image from 'next/image';
 import React from 'react';
 import styles from '../styles/GameControllerAndText.module.scss';
 import Link from 'next/link';
@@ -24,8 +25,10 @@ const GameControlImageAndText = () => {
         </Link>
       </div>
       <div className="w-3/6">
-        <img
+        <Image
           src="/assets/images/89285-OII6Q2-655 1.png"
+          width={500}
+          height={500}
           className="z-50 relative w-full h-full"
         />
       </div>

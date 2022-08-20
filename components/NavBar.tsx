@@ -1,13 +1,9 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import path from 'path';
-import { useEffect, useState } from 'react';
 
 const NavBar = () => {
   const { pathname } = useRouter();
   const color = 'text-blue-700';
-
-  console.log(pathname, ' ===');
 
   return (
     <nav className="border-gray-200 px-2 sm:px-4 py-2.5 bg-gray-900 z-50 relative w-screen">
@@ -29,7 +25,7 @@ const NavBar = () => {
             <li>
               <div
                 className={`block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 text-gray-400 md:hover:text-white hover:bg-gray-700 hover:text-white md:hover:bg-transparent ${
-                  !(pathname === '/shoppingList' || pathname === '/addItems')
+                  !(pathname === '/history' || pathname === '/addItems')
                     ? color
                     : 'text-white'
                 }`}
@@ -41,10 +37,10 @@ const NavBar = () => {
             <li>
               <div
                 className={`block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 text-gray-400 md:hover:text-white hover:bg-gray-700 hover:text-white md:hover:bg-transparent ${
-                  pathname === '/shoppingList' ? color : 'text-white'
+                  pathname === '/history' ? color : 'text-white'
                 }`}
               >
-                <Link href={'/shoppingList'}>Shopping List</Link>
+                <Link href={'/history'}>Shopping History</Link>
               </div>
             </li>
             <li>
