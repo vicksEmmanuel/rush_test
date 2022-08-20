@@ -40,9 +40,7 @@
     "tailwindcss": "^3.1.8",
     "three": "^0.143.0",
     "urql": "^2.2.3",
-    "yup": "^0.32.11",
-    "zustand": "^3.5.1",
-    "zustand-persist": "^0.3.1"
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@babel/core": "^7.18.10",

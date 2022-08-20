@@ -3,7 +3,7 @@ import { isAfter, isBefore, isSameDay, isValid } from 'date-fns';
 import { isEmpty } from 'lodash';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import previousShoppingList from '../../data/shop';
-import { Shop } from '../../state/useShopList';
+import { Shop, sort } from '../../schemas/AddShopSchema';
 
 export type Data = {
   data: Array<Shop>;
@@ -19,24 +19,6 @@ export interface Query {
   name?: string;
 }
 
-export const sameOrBefore = (d1 = new Date(), d2 = new Date()) => {
-  return isSameDay(d1, d2) || isBefore(d1, d2);
-};
-
-export const sameOrAfter = (d1 = new Date(), d2 = new Date()) => {
-  return isSameDay(d1, d2) || isAfter(d1, d2);
-};
-
-export const isBetween = (
-  startDate = new Date(),
-  endDate = new Date(),
-  comparedDate = new Date()
-) => {
-  return (
-    sameOrBefore(endDate, comparedDate) && sameOrAfter(startDate, comparedDate)
-  );
-};
-
 export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
@@ -47,7 +29,7 @@ export default function handler(
     query = { limit: 10, pageNumber: 1 };
   }
   const controls = (query.limit ?? 10) * (query.pageNumber ?? 1);
-  const value = previousShoppingList.filter((i) => {
+  const value = previousShoppingList.filter((i: Shop) => {
     if (
       !isEmpty(query.name) &&
       i.name?.toLowerCase().includes(query.name?.toLowerCase()!)
@@ -68,7 +50,9 @@ export default function handler(
     }
     return false;
   });
-  const limitedResult = value.slice(0, controls) as unknown as Array<Shop>;
+  const limitedResult = (value as any)
+    .sort(sort)
+    .slice(0, controls) as unknown as Array<Shop>;
 
   res
     .status(200)

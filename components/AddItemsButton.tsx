@@ -13,13 +13,25 @@ import {
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { AiOutlinePlus } from 'react-icons/ai';
-import { AddShopDefaultValue, AddShopSchema } from '../schemas/AddShopSchema';
-import { Shop, useShopList } from '../state/useShopList';
+import {
+  AddShopDefaultValue,
+  AddShopSchema,
+  Shop,
+} from '../schemas/AddShopSchema';
 
-const AddItemsButton = () => {
+const AddItemsButton = ({ onItemAdded }: { onItemAdded?(e: Shop): void }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { addProduct } = useShopList();
   const toast = useToast();
+
+  const addShoppingList = async (e: Shop) => {
+    const url = `/api/addShoppingList`;
+    const response = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(e),
+    });
+    const data = await response.json();
+    return data;
+  };
 
   const {
     register,
@@ -34,7 +46,8 @@ const AddItemsButton = () => {
 
   const onSubmit = async (data: Shop) => {
     toast({ title: 'Successful', colorScheme: 'green' });
-    addProduct(data);
+    addShoppingList(data);
+    onItemAdded?.(data);
     onClose();
   };
 

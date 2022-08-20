@@ -1,6 +1,18 @@
 import { uuid } from 'short-uuid';
 import * as yup from 'yup';
-import { Shop } from '../state/useShopList';
+
+
+export interface Shop {
+  name?: string;
+  dateTime: Date;
+  store?: string;
+  storeLink?: string;
+  id?: string;
+}
+
+export const sort = (a: Shop, b: Shop) => {
+  return new Date(a.dateTime) > new Date(b.dateTime) ? -1 : 1;
+};
 
 export const AddShopDefaultValue: Shop = {
   name: '',
