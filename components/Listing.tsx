@@ -84,8 +84,9 @@ const Listing = ({ editable }: ListingProps) => {
   const onScroll = async () => {
     if (listInnerRef.current) {
       const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
-      if (scrollTop + clientHeight === scrollHeight) {
+      if (Math.ceil(scrollTop + clientHeight) === scrollHeight) {
         setPageNumber(pageNumber + 1);
+        searchObject.next(getProperties());
       }
     }
   };
@@ -139,7 +140,19 @@ const Listing = ({ editable }: ListingProps) => {
               alignSelf: 'center',
               borderRadius: 20,
               width: '90%',
-              overflowY: 'auto',
+              overflowY: 'scroll',
+            }}
+            css={{
+              '&::-webkit-scrollbar': {
+                // width: '4px',
+              },
+              '&::-webkit-scrollbar-track': {
+                // width: '6px',
+              },
+              '&::-webkit-scrollbar-thumb': {
+                borderRadius: '24px',
+                height: '10px',
+              },
             }}
           >
             <Table variant="simple">
