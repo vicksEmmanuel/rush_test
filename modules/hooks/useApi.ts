@@ -7,11 +7,16 @@ import { Shop } from '../../schemas/AddShopSchema';
  * @returns {fetchHistory: void, deleteItem: void, addShoppingList: void}
  */
 const useApi = () => {
-  const fetchHistory = async (e: Query) => {
-    const url = `/api/previousShoppingHistory?limit=${e.limit}&pageNumber=${e.pageNumber}&store=${e.store}&name=${e.name}&startDate=${e.startDate}&endDate=${e.endDate}`;
+
+  const fetchApi = async (url: string) => {
     const response = await fetch(url);
     const data = await response.json();
     return data;
+  };
+
+  const fetchHistory = async (e: Query) => {
+    const url = `/api/previousShoppingHistory?limit=${e.limit}&pageNumber=${e.pageNumber}&store=${e.store}&name=${e.name}&startDate=${e.startDate}&endDate=${e.endDate}`;
+    return await fetchApi(url);
   };
 
   const addShoppingList = async (e: Shop) => {
@@ -26,9 +31,7 @@ const useApi = () => {
 
   const deleteItem = async (e: RemoveQuery) => {
     const url = `/api/removeItem?id=${e.id}`;
-    const response = await fetch(url);
-    await response.json();
-    return e;
+    return await fetchApi(url);
   };
 
   return {
