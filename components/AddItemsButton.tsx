@@ -13,25 +13,22 @@ import {
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { AiOutlinePlus } from 'react-icons/ai';
+import useApi from '../modules/hooks/useApi';
 import {
   AddShopDefaultValue,
   AddShopSchema,
   Shop,
 } from '../schemas/AddShopSchema';
 
+/**
+ *
+ * @param onItemAdded(e: Shop) executes after a new item as been created
+ * @returns JSX.Element
+ */
 const AddItemsButton = ({ onItemAdded }: { onItemAdded?(e: Shop): void }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
-
-  const addShoppingList = async (e: Shop) => {
-    const url = `/api/addShoppingList`;
-    const response = await fetch(url, {
-      method: 'POST',
-      body: JSON.stringify(e),
-    });
-    const data = await response.json();
-    return data;
-  };
+  const { addShoppingList } = useApi();
 
   const {
     register,
@@ -110,13 +107,6 @@ const AddItemsButton = ({ onItemAdded }: { onItemAdded?(e: Shop): void }) => {
               </div>
             </form>
           </ModalBody>
-
-          {/* <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={onClose}>
-              Close
-            </Button>
-            <Button variant='ghost'>Secondary Action</Button>
-          </ModalFooter> */}
         </ModalContent>
       </Modal>
     </>

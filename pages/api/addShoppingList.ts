@@ -1,4 +1,3 @@
-import path from 'path';
 import { promises as fs } from 'fs';
 import { isEmpty } from 'lodash';
 import type { NextApiRequest, NextApiResponse } from 'next';
@@ -11,6 +10,12 @@ export type Data = {
   message?: string;
 };
 
+/**
+ * Api for adding new items to the list
+ * @param req
+ * @param res
+ * @returns
+ */
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>

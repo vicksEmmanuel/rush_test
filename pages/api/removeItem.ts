@@ -1,7 +1,6 @@
 import { promises as fs } from 'fs';
 import { isEmpty } from 'lodash';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { uuid } from 'short-uuid';
 import previousShoppingList from '../../data/shop';
 import { Shop } from '../../schemas/AddShopSchema';
 
@@ -14,6 +13,12 @@ export interface RemoveQuery {
   id: string;
 }
 
+/**
+ * Api that removes item from the list
+ * @param req 
+ * @param res 
+ * @returns 
+ */
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>

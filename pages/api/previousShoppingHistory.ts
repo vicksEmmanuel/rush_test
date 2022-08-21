@@ -19,6 +19,11 @@ export interface Query {
   name?: string;
 }
 
+/**
+ * Api that handles the retrieving of the shopping list
+ * @param req 
+ * @param res 
+ */
 export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
