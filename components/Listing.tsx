@@ -5,46 +5,34 @@ import {
   Table,
   TableContainer,
   Tbody,
-  Td,
   Th,
   Thead,
   Tr,
 } from '@chakra-ui/react';
-import { uniqBy } from 'lodash';
-import moment from 'moment';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { MdDelete } from 'react-icons/md';
+import {
+  BehaviorSubject,
+  debounceTime,
+  distinctUntilChanged,
+  from,
+  mergeMap,
+} from 'rxjs';
 import BasicDateRangePicker from '../components/BasicDateRangePicker';
-import { Data, Query } from '../pages/api/previousShoppingHistory';
-import { RemoveQuery } from '../pages/api/removeItem';
-import { Shop, sort } from '../schemas/AddShopSchema';
+import useApi from '../modules/hooks/useApi';
+import useObservable from '../modules/hooks/useObservable';
+import { Query } from '../pages/api/previousShoppingHistory';
+import { Shop } from '../schemas/AddShopSchema';
+import TableBody from './TableBody';
 
 export interface ListingProps {
   editable?: boolean;
-  value?: Shop;
 }
 
-const Listing = ({ editable, value }: ListingProps) => {
-  const fetchHistory = async (e: Query) => {
-    const url = `/api/previousShoppingHistory?limit=${e.limit}&pageNumber=${e.pageNumber}&store=${e.store}&name=${e.name}&startDate=${e.startDate}&endDate=${e.endDate}`;
-    const response = await fetch(url);
-    const data = await response.json();
-    return data;
-  };
+const Listing = ({ editable }: ListingProps) => {
+  const { fetchHistory } = useApi();
 
-  const deleteItem = async (e: RemoveQuery) => {
-    const url = `/api/removeItem?id=${e.id}`;
-    const response = await fetch(url);
-    const data = await response.json();
-
-    const temp = result.filter((i) => i.id !== e.id);
-    setResult([...temp]);
-
-    return data;
-  };
-
-  const { register, handleSubmit, setValue, watch } = useForm({
+  const { register, handleSubmit, setValue, getValues, reset } = useForm({
     defaultValues: {
       name: '',
       store: '',
@@ -54,34 +42,41 @@ const Listing = ({ editable, value }: ListingProps) => {
     reValidateMode: 'onChange',
   });
 
-  useEffect(() => {
-    if (value) {
-      const temp = result;
-      temp.unshift(value);
-      setResult([...temp]);
-    }
-  }, [value]);
+  const [result, setResult] = useState<{
+    data?: Array<Shop>;
+    hasNextPage?: boolean;
+  }>({ hasNextPage: true, data: [] });
 
-  useEffect(() => {
-    submit(watch());
-  }, []);
-
-  const [result, setResult] = useState<Array<Shop>>([]);
   const [pageNumber, setPageNumber] = useState(1);
 
-  const submit = async (e: any) => {
-    const resultFromApi = await fetchHistory({
+  const getProperties = () => {
+    return {
       limit: 10,
-      name: e?.name,
-      store: e?.store,
-      pageNumber: 1,
-      startDate: watch('dateRange')?.[0] ?? undefined,
-      endDate: watch('dateRange')?.[1] ?? undefined,
-    });
-    setPageNumber(1);
+      name: getValues('name'),
+      store: getValues('store'),
+      pageNumber,
+      startDate: getValues('dateRange')?.[0] ?? undefined,
+      endDate: getValues('dateRange')?.[1] ?? undefined,
+    };
+  };
 
-    const data = [...resultFromApi.data].sort(sort);
-    setResult(uniqBy(data, 'id'));
+  const searchObject = new BehaviorSubject(getProperties() as Query);
+  const searchResultObservable = searchObject.pipe(
+    debounceTime(750),
+    distinctUntilChanged() as any,
+    mergeMap((val: Query) => {
+      return from(fetchHistory({ ...val }));
+    })
+  );
+
+  useObservable(searchResultObservable, setResult);
+
+  const submit = async () => {
+    setPageNumber(1);
+    reset();
+    setTimeout(() => {
+      searchObject.next(getProperties());
+    }, 300);
   };
 
   const listInnerRef = useRef();
@@ -90,18 +85,7 @@ const Listing = ({ editable, value }: ListingProps) => {
     if (listInnerRef.current) {
       const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
       if (scrollTop + clientHeight === scrollHeight) {
-        const resultFromApi = (await fetchHistory({
-          limit: 10,
-          name: watch('name'),
-          store: watch('store'),
-          pageNumber: pageNumber + 1,
-          startDate: watch('dateRange')?.[0] ?? undefined,
-          endDate: watch('dateRange')?.[1] ?? undefined,
-        })) as Data;
         setPageNumber(pageNumber + 1);
-
-        const data = [...resultFromApi.data].sort(sort);
-        setResult(uniqBy(data, 'id'));
       }
     }
   };
@@ -139,7 +123,7 @@ const Listing = ({ editable, value }: ListingProps) => {
         </div>
         <div className="flex mb-4 mt-1 flex-col mx-3">
           <Button type="submit" backgroundColor={'black'} color={'#fff'}>
-            Filter Search
+            Clear Search
           </Button>
         </div>
       </form>
@@ -153,7 +137,7 @@ const Listing = ({ editable, value }: ListingProps) => {
             style={{
               height: '500px',
               alignSelf: 'center',
-              borderRadius: 30,
+              borderRadius: 20,
               width: '90%',
               overflowY: 'auto',
             }}
@@ -170,36 +154,8 @@ const Listing = ({ editable, value }: ListingProps) => {
                 </Tr>
               </Thead>
               <Tbody>
-                {result.map((i, idx) => {
-                  return (
-                    <Tr key={idx}>
-                      <Td textTransform={'capitalize'}>{i.name}</Td>
-                      <Td textTransform={'capitalize'}>
-                        <a
-                          href={i.storeLink}
-                          target={'_blank'}
-                          rel="noreferrer"
-                        >
-                          {i.store}
-                        </a>
-                      </Td>
-                      <Td isNumeric>
-                        {moment(new Date(i.dateTime)).format(
-                          'dddd, MMMM Do yyyy, HH:mm'
-                        )}
-                      </Td>
-                      {editable && (
-                        <Td className="flex justify-center">
-                          <MdDelete
-                            onClick={() => {
-                              deleteItem({ id: i.id ?? '' });
-                            }}
-                            className="cursor-pointer"
-                          />
-                        </Td>
-                      )}
-                    </Tr>
-                  );
+                {(result.data ?? []).map((i, idx) => {
+                  return <TableBody shop={i} editable={editable} key={idx} />;
                 })}
               </Tbody>
             </Table>

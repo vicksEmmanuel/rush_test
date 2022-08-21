@@ -1,5 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { isAfter, isBefore, isSameDay, isValid } from 'date-fns';
+import { isValid } from 'date-fns';
 import { isEmpty } from 'lodash';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import previousShoppingList from '../../data/shop';
@@ -29,32 +29,44 @@ export default function handler(
     query = { limit: 10, pageNumber: 1 };
   }
   const controls = (query.limit ?? 10) * (query.pageNumber ?? 1);
-  const value = previousShoppingList.filter((i: Shop) => {
+  const value = [] as Array<Shop>;
+  const finalSearch = [] as Array<Shop>;
+
+  (previousShoppingList as Array<Shop>).forEach((i: Shop) => {
     if (
       !isEmpty(query.name) &&
       i.name?.toLowerCase().includes(query.name?.toLowerCase()!)
     ) {
-      return true;
+      value.push(i);
     } else if (
       !isEmpty(query.store) &&
       i.store?.toLowerCase().includes(query.store?.toLowerCase()!)
     ) {
-      return true;
-    } else if (
+      value.push(i);
+    } else if (isEmpty(query.name) && isEmpty(query.store)) {
+      value.push(i);
+    }
+  });
+
+  value.forEach((i) => {
+    if (
       isValid(new Date(query.startDate!)) &&
       new Date(i.dateTime) >= new Date(query?.startDate!) &&
       isValid(new Date(query.endDate!)) &&
       new Date(i.dateTime) <= new Date(query?.endDate!)
     ) {
-      return true;
+      finalSearch.push(i);
     }
-    return false;
   });
-  const limitedResult = (value as any)
+
+  const limitedResult = (finalSearch as any)
     .sort(sort)
     .slice(0, controls) as unknown as Array<Shop>;
 
   res
     .status(200)
-    .json({ data: limitedResult, hasNextPage: controls > value.length });
+    .json({
+      data: limitedResult,
+      hasNextPage: !(controls > finalSearch.length),
+    });
 }

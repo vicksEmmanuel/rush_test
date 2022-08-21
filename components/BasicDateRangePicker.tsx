@@ -1,9 +1,9 @@
-import 'react-date-range/dist/styles.css'; // main style file
-import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
-import 'react-date-range/dist/theme/default.css';
+import { format, isValid, subDays } from 'date-fns';
 import * as React from 'react';
 import { DateRangePicker } from 'react-date-range';
-import { format, isValid, sub, subDays } from 'date-fns';
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css';
+import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 
 export interface RangeType {
   startDate: Date;
@@ -42,8 +42,8 @@ export default function BasicDateRangePicker({
       >
         {isValid(value?.startDate) && isValid(value?.endDate) && (
           <div className="flex flex-row cursor-pointer">
-            {format(new Date(value?.startDate!), 'MMMM dd, yyyy')} -{' '}
-            {format(new Date(value?.endDate!), 'MMMM dd, yyyy')}
+            {format(new Date(value?.startDate!), 'MMM dd, yyyy')} -{' '}
+            {format(new Date(value?.endDate!), 'MMM dd, yyyy')}
             <div className="align-center flex items-center mx-2">
               {!isOpen ? (
                 <IoIosArrowDown color="#000" />
@@ -62,6 +62,7 @@ export default function BasicDateRangePicker({
             moveRangeOnFirstSelection
             retainEndDateOnFirstSelection
             dragSelectionEnabled
+            maxDate={new Date()}
             onChange={handleSelect as any}
           />
         </div>

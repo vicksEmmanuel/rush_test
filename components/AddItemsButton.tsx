@@ -36,6 +36,7 @@ const AddItemsButton = ({ onItemAdded }: { onItemAdded?(e: Shop): void }) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     defaultValues: AddShopDefaultValue,
@@ -48,6 +49,7 @@ const AddItemsButton = ({ onItemAdded }: { onItemAdded?(e: Shop): void }) => {
     toast({ title: 'Successful', colorScheme: 'green' });
     addShoppingList(data);
     onItemAdded?.(data);
+    reset();
     onClose();
   };
 
