@@ -37,7 +37,7 @@ export default function BasicDateRangePicker({
   return (
     <div className="overflow-scroll">
       <div
-        className="relative z-50 w-full h-full bg-white px-4 rounded py-2 mt-1 items-center flex justify-center"
+        className="relative z-50 w-full h-full bg-white px-4 rounded py-2 mt-1 items-center flex justify-center flex-wrap"
         onClick={() => setIsOpen(!isOpen)}
       >
         {isValid(value?.startDate) && isValid(value?.endDate) && (

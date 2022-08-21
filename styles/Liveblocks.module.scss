@@ -1,10 +1,8 @@
 $fadedBorder: rgba(228, 255, 255, 0.5);
 
 .liveblock {
-    @apply w-[5%] h-[10%] bg-primary-900 md:w-[5%] md:h-[7%];
     border-color: rgba(18, 136, 179, 0.9);
     border-width: 0.1px;
-
 }
 .liveblock_wrapper {
     @apply flex flex-row flex-wrap absolute h-screen w-screen;

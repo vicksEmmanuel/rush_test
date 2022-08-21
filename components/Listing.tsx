@@ -92,10 +92,10 @@ const Listing = ({ editable }: ListingProps) => {
   };
 
   return (
-    <div className="z-50">
+    <div className="z-50 w-screen">
       <form
         onSubmit={handleSubmit(submit)}
-        className="lg:flex lg:flex-row md:flex-row md:flex justify-center z-50 relative my-5"
+        className="lg:flex lg:flex-row md:flex-row md:flex justify-center z-50 relative my-5 w-full"
       >
         <div className="flex flex-col mb-4 mx-3">
           <Input
@@ -129,51 +129,46 @@ const Listing = ({ editable }: ListingProps) => {
         </div>
       </form>
 
-      <div className="">
-        <Box className="relative z-30 flex justify-center items-center">
-          <TableContainer
-            onScroll={onScroll}
-            backgroundColor={'#fff'}
-            ref={listInnerRef as any}
-            style={{
-              height: '500px',
-              alignSelf: 'center',
-              borderRadius: 20,
-              width: '90%',
-              overflowY: 'scroll',
-            }}
-            css={{
-              '&::-webkit-scrollbar': {
-                // width: '4px',
-              },
-              '&::-webkit-scrollbar-track': {
-                // width: '6px',
-              },
-              '&::-webkit-scrollbar-thumb': {
-                borderRadius: '24px',
-                height: '10px',
-              },
-            }}
-          >
-            <Table variant="simple">
-              <Thead>
-                <Tr>
-                  <Th width={'30%'}>Product</Th>
-                  <Th width={'30%'}>Store</Th>
-                  <Th width={'30%'} textAlign={'center'}>
-                    Date
-                  </Th>
-                  {editable && <Th>Delete</Th>}
-                </Tr>
-              </Thead>
-              <Tbody>
-                {(result.data ?? []).map((i, idx) => {
-                  return <TableBody shop={i} editable={editable} key={idx} />;
-                })}
-              </Tbody>
-            </Table>
-          </TableContainer>
-        </Box>
+      <div className="relative z-30 flex lg:justify-center lg:items-center md:justify-center md:items-center   sm:justify-center sm:items-center w-full">
+        <TableContainer
+          onScroll={onScroll}
+          backgroundColor={'#fff'}
+          ref={listInnerRef as any}
+          className="h-[500px] self-center rounded-2xl sm:w-[95%] xs:w-5/6 lg:w-[90%] md:w-[90%]"
+          style={{
+            overflow: 'scroll',
+          }}
+          css={{
+            '&::-webkit-scrollbar': {
+              // width: '4px',
+            },
+            '&::-webkit-scrollbar-track': {
+              // width: '6px',
+            },
+            '&::-webkit-scrollbar-thumb': {
+              borderRadius: '24px',
+              height: '10px',
+            },
+          }}
+        >
+          <Table variant="simple" size="md">
+            <Thead>
+              <Tr>
+                <Th width={'30%'}>Product</Th>
+                <Th width={'30%'}>Store</Th>
+                <Th width={'30%'} textAlign={'center'}>
+                  Date
+                </Th>
+                {editable && <Th>Delete</Th>}
+              </Tr>
+            </Thead>
+            <Tbody>
+              {(result.data ?? []).map((i, idx) => {
+                return <TableBody shop={i} editable={editable} key={idx} />;
+              })}
+            </Tbody>
+          </Table>
+        </TableContainer>
       </div>
     </div>
   );

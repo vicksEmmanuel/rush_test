@@ -46,6 +46,7 @@ const LiveBlocks = ({ numberOfBlocks }: { numberOfBlocks: number }) => {
             className={`
                 ${styles.liveblock} 
                 ${getSupportingStyle(idx)}
+                w-[5%] h-[10%] bg-primary-900 md:w-['5%'] md:h-[7%] xs:w-[5%] h-[2%]
             `}
           ></div>
         );

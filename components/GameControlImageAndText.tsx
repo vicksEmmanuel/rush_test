@@ -7,8 +7,8 @@ import Link from 'next/link';
 const GameControlImageAndText = () => {
   return (
     <>
-      <div className="w-4/6 relative z-50 px-5">
-        <h1 className={styles.header}>Game Shop</h1>
+      <div className="lg:w-4/6 md:w-4/6 xs:w-full sm:w-full relative z-50 px-5 xs:px-0 xs:py-4">
+        <div className={`xs:text-xl ${styles['header']}`}>Game Shop</div>
         <p className="max-w-[500px] pb-10 pt-3 text-justify font-secondary">
           Lorem Ipsum is simply dummy text of the printing and typesetting
           industry. Lorem Ipsum has been the industrys standard dummy text ever
@@ -17,14 +17,14 @@ const GameControlImageAndText = () => {
         </p>
         <Link href={'/addItems'}>
           <button
-            className={`${styles['button']} rounded-2xl bg-button text-white p-4 px-10 flex flex-row text-center font-primary`}
+            className={`${styles['button']} rounded-2xl bg-button text-sm text-white p-4 px-10 flex flex-row text-center font-primary`}
           >
             See Available List
-            <FaGamepad className="align-center mt-1 ml-4" />
+            <FaGamepad className="align-center mt-1 ml-4 hidden lg:block md:block" />
           </button>
         </Link>
       </div>
-      <div className="w-3/6">
+      <div className="relative hidden lg:block md:block">
         <Image
           src="/assets/images/89285-OII6Q2-655 1.png"
           width={500}
