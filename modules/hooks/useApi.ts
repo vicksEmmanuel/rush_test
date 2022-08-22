@@ -1,3 +1,4 @@
+import fetch from 'isomorphic-fetch';
 import { Query } from '../../pages/api/previousShoppingHistory';
 import { RemoveQuery } from '../../pages/api/removeItem';
 import { Shop } from '../../schemas/AddShopSchema';
@@ -7,7 +8,6 @@ import { Shop } from '../../schemas/AddShopSchema';
  * @returns {fetchHistory: void, deleteItem: void, addShoppingList: void}
  */
 const useApi = () => {
-
   const fetchApi = async (url: string) => {
     const response = await fetch(url);
     const data = await response.json();

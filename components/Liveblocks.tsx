@@ -34,6 +34,7 @@ const LiveBlocks = ({ numberOfBlocks }: { numberOfBlocks: number }) => {
         return (
           <div
             key={idx}
+            data-testid={`${idx}-block`}
             onMouseOver={() => {
               if (scrollDirection === 'up') {
                 const index = idx - 20;

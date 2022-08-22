@@ -11,6 +11,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { isEmpty } from 'lodash';
 import { useForm } from 'react-hook-form';
 import { AiOutlinePlus } from 'react-icons/ai';
 import useApi from '../modules/hooks/useApi';
@@ -38,7 +39,7 @@ const AddItemsButton = ({ onItemAdded }: { onItemAdded?(e: Shop): void }) => {
   } = useForm({
     defaultValues: AddShopDefaultValue,
     resolver: yupResolver(AddShopSchema),
-    mode: 'onChange',
+    mode: 'all',
     reValidateMode: 'onChange',
   });
 
@@ -54,6 +55,7 @@ const AddItemsButton = ({ onItemAdded }: { onItemAdded?(e: Shop): void }) => {
     <>
       <div
         onClick={onOpen}
+        data-testid="open"
         className="rounded-full w-20 h-20 bg-button absolute bottom-10 right-10 cursor-pointer z-50 flex justify-center items-center"
       >
         <AiOutlinePlus size={30} color={'#fff'} />
@@ -64,13 +66,14 @@ const AddItemsButton = ({ onItemAdded }: { onItemAdded?(e: Shop): void }) => {
           <ModalHeader>Add To Shopping List</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form data-testid="form" onSubmit={handleSubmit(onSubmit)}>
               <div className="relative">
                 <div className="flex flex-col mb-4">
                   <Input
                     placeholder="Add Product Name"
                     className="my-1"
                     {...register('name')}
+                    data-testid="name"
                   />
                   <span className="text-red-500 text-xs italic w-full">
                     {errors.name && errors.name?.message}
@@ -81,6 +84,7 @@ const AddItemsButton = ({ onItemAdded }: { onItemAdded?(e: Shop): void }) => {
                   <Input
                     placeholder="Add Store Name"
                     className="my-1"
+                    data-testid={`store`}
                     {...register('store')}
                   />
                   <span className="text-red-500 text-xs italic w-full">
@@ -92,6 +96,7 @@ const AddItemsButton = ({ onItemAdded }: { onItemAdded?(e: Shop): void }) => {
                   <Input
                     placeholder="Store Link"
                     className="my-1"
+                    data-testid={`storelink`}
                     {...register('storeLink')}
                   />
                   <span className="text-red-500 text-xs italic w-full">
@@ -100,7 +105,12 @@ const AddItemsButton = ({ onItemAdded }: { onItemAdded?(e: Shop): void }) => {
                 </div>
 
                 <div className="flex justify-end my-10">
-                  <Button type="submit" colorScheme="blue">
+                  <Button
+                    isDisabled={!isEmpty(errors)}
+                    type="submit"
+                    data-testid="button"
+                    colorScheme="blue"
+                  >
                     Submit
                   </Button>
                 </div>
